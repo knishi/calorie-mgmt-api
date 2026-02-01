@@ -3,7 +3,9 @@
  * Decoupled communication with the Calorie Management API
  */
 
-const BASE_URL = 'http://localhost:8080/v1';
+const urlParams = new URLSearchParams(window.location.search);
+const apiPort = urlParams.get('api_port') || '8080';
+const BASE_URL = `http://localhost:${apiPort}/v1`;
 const TOKEN = 'SECRET_TOKEN';
 
 async function request(endpoint, method = 'GET', body = null) {

@@ -2,35 +2,44 @@
 
 本プロジェクトの内部構造と、各コンポーネントがどのように協調して動作するかを説明します。
 
-## 1. システム協調フロー (Coordination Flow)
+## 1. システム構成と協調フロー (Coordination Flow)
 
-本システムは Docker Compose によってオーケストレーションされ、Nginx がリバースプロキシとして、Gunicorn が WSGI サーバーとして機能します。
+### 運用時 (Production/Development)
+本システムは Backend (API) と Frontend (GUI) が完全に疎結合な状態で動作します。
 
 ```mermaid
 graph TD
-    User((ユーザー/クライアント)) -->|HTTP 3000| GUI[Frontend / Static]
-    GUI -->|REST API 8080| Nginx[Nginx Container]
-    
-    subgraph "Docker Compose Network"
-        Nginx -->|Proxy Pass| Gunicorn[Gunicorn / WSGI]
-        Gunicorn -->|Load App| App[apibase.app]
-        App -->|SQLAlchemy| DB[(Database / SQLite)]
-    end
-    
-    subgraph "Logic Layer"
-        App -->|Dispatch| Controllers[Controllers]
-        Controllers -->|Access| DBApi[DB API]
-        Controllers -->|Calc| Utils[Common Utils]
-        DBApi -->|Query| Models[Models]
-    end
-
-    style GUI fill:#ffd,stroke:#333,stroke-width:2px
-    style App fill:#f9f,stroke:#333,stroke-width:2px
-    style Nginx fill:#bbf,stroke:#333,stroke-width:2px
-    style Gunicorn fill:#dfd,stroke:#333,stroke-width:2px
+    User((ユーザー)) -->|ブラウザ操作| GUI[GUI: Vanilla JS/CSS]
+    GUI -->|Fetch API / CORS| API[API Server: Pecan/Gunicorn]
+    API -->|oslo.db| DB[(Database: SQLite)]
 ```
 
-## 2. ディレクトリ構造
+### 検証時 (Testing Coordination)
+Playwright を使用した E2E テストでは、テストランナーが自動的に Backend と Frontend の両方を起動し、協調動作を検証します。
+
+```mermaid
+graph TD
+    TestRunner[pytest / Playwright] -->|Setup Fixtures| Servers
+    subgraph Servers [Test Servers]
+        API_Srv[API Live Server: Port 8081]
+        GUI_Srv[Static Web Server: Port 3001]
+    end
+    TestRunner -->|Browser Control| GUI_Srv
+    GUI_Srv -->|API Request| API_Srv
+    API_Srv -->|Data Access| TestDB[(Test Database: test_e2e.db)]
+```
+
+## 2. ソフトウェアスタック (Software Stack)
+
+| 役割 | 技術 / ライブラリ | 備考 |
+| :--- | :--- | :--- |
+| **Backend API** | Python, Pecan, Gunicorn | WSGI ベースの高可用性設計 |
+| **Database** | SQLite, SQLAlchemy, oslo.db | RDBMS 抽象化済み |
+| **Frontend GUI** | Vanilla HTML, CSS, JavaScript | 疎結合（Fetch API + CORS） |
+| **API Testing** | pytest, webtest | 高速なモックベース検証 |
+| **GUI Testing** | Playwright, pytest-playwright | ブラウザ実機 E2E 検証 |
+
+## 3. ディレクトリ構造
 
 ```text
 ├── etc/                   # 設定ファイル類

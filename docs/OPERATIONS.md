@@ -44,9 +44,19 @@ cd public
 python3 -m http.server 3000
 ```
 
-### 動作検証スクリプト
+### 動作検証スクリプト (Phase 2 API)
 ```bash
 ./bin/verify_phase2.sh
+```
+
+### GUI 自動テスト (E2E)
+Playwright を使用してブラウザ操作を自動検証します。テスト実行時に API と Web サーバーが自動でバックグラウンド起動されます。
+```bash
+# ヘッドレスモード（通常）
+pytest tests/test_gui.py
+
+# ブラウザを表示して実行（デバッグ用）
+pytest tests/test_gui.py --headed
 ```
 
 ## 3. CI/CDパイプライン (GitHub Actions)

@@ -1,7 +1,9 @@
+import os
 from oslo_config import cfg
 from oslo_db.sqlalchemy import enginefacade
 from sqlalchemy import orm
 from oslo_log import log as logging
+from apibase.db import models
 
 LOG = logging.getLogger(__name__)
 
@@ -10,7 +12,7 @@ CONF = cfg.CONF
 # Define the engine facade
 _context_manager = enginefacade.transaction_context()
 _context_manager.configure(
-    connection="sqlite:///apibase.db"
+    connection=os.environ.get("APIBASE_DB_CONNECTION", "sqlite:///apibase.db")
 )
 
 def get_engine():
