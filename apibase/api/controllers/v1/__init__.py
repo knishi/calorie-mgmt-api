@@ -5,6 +5,9 @@ from oslo_log import log as logging
 from apibase.db import api as db_api
 from apibase.common import exception
 from apibase.api.controllers.v1 import meals as meals_controller
+from apibase.api.controllers.v1 import profile as profile_controller
+from apibase.api.controllers.v1 import goals as goals_controller
+from apibase.api.controllers.v1 import summary as summary_controller
 
 LOG = logging.getLogger(__name__)
 
@@ -49,3 +52,12 @@ class V1Controller(object):
 
     # Sub-controller for /v1/meals
     meals = meals_controller.MealsController()
+
+    # Sub-controller for /v1/profile
+    profile = profile_controller.ProfileController()
+
+    # Sub-controller for /v1/goals
+    goals = goals_controller.GoalsController()
+
+    # Sub-controller for /v1/summary
+    summary = summary_controller.SummaryController()

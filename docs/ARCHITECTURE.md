@@ -8,7 +8,8 @@
 
 ```mermaid
 graph TD
-    User((ユーザー/クライアント)) -->|HTTP 8080| Nginx[Nginx Container]
+    User((ユーザー/クライアント)) -->|HTTP 3000| GUI[Frontend / Static]
+    GUI -->|REST API 8080| Nginx[Nginx Container]
     
     subgraph "Docker Compose Network"
         Nginx -->|Proxy Pass| Gunicorn[Gunicorn / WSGI]
@@ -19,9 +20,11 @@ graph TD
     subgraph "Logic Layer"
         App -->|Dispatch| Controllers[Controllers]
         Controllers -->|Access| DBApi[DB API]
+        Controllers -->|Calc| Utils[Common Utils]
         DBApi -->|Query| Models[Models]
     end
 
+    style GUI fill:#ffd,stroke:#333,stroke-width:2px
     style App fill:#f9f,stroke:#333,stroke-width:2px
     style Nginx fill:#bbf,stroke:#333,stroke-width:2px
     style Gunicorn fill:#dfd,stroke:#333,stroke-width:2px
@@ -36,11 +39,12 @@ graph TD
 │   └── nginx/
 ├── build/                 # ビルド・デプロイ関連ファイル
 ├── bin/                   # 運用補助スクリプト (manage.sh 等)
-├── public/                # 静的ファイル (API docs, etc.)
+├── public/                # 疎結合なGUIアセット (index.html, JS, CSS)
 ├── apibase/               # アプリケーション・パッケージ
 │   ├── app.py             # WSGIエントリポイント
-│   ├── api/               # Webレイヤー
-│   ├── db/                # DBレイヤー
+│   ├── api/               # Webレイヤー (Controllers)
+│   ├── common/            # 共通ユーティリティ (計算ロジック等)
+│   ├── db/                # DBレイヤー (Models, API)
 │   └── ...
 ├── pyproject.toml         # プロジェクトメタデータ・設定集約
 └── docker-compose.yml     # コンテナオーケストレーション

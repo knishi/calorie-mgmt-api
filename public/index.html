@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calorie Mgmt - Smart Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Calorie Mgmt</h1>
+            <p>Smart & Decoupled Management System</p>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab active" data-tab="dashboard">Dashboard</button>
+            <button class="tab" data-tab="history">History</button>
+            <button class="tab" data-tab="profile">Profile</button>
+        </nav>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="tab-content">
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h2>🔥 Today's Summary</h2>
+                    <div id="summary-content">
+                        <div class="stat-highlight"><span id="total-consumed">0</span> <span class="stat-unit">/ <span id="daily-goal">2000</span> kcal</span></div>
+                        <p id="remaining-text">Remaining: <span id="remaining-value">2000</span> kcal</p>
+                        <div class="progress-bar">
+                            <div id="progress-fill" class="progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>📝 Quick Entry</h2>
+                    <form id="meal-form">
+                        <div class="form-group">
+                            <label for="food-name">Food Name</label>
+                            <input type="text" id="food-name" placeholder="e.g. Apple" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories (kcal)</label>
+                            <input type="number" id="calories" placeholder="e.g. 95" required>
+                        </div>
+                        <button type="submit">Add Meal</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- History Section -->
+        <section id="history" class="tab-content hidden">
+            <div class="card">
+                <h2>🕒 Recent Meals</h2>
+                <ul id="meal-history" class="history-list">
+                    <!-- History items will be injected here -->
+                </ul>
+            </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="profile" class="tab-content hidden">
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h2>👤 Body Profile</h2>
+                    <form id="profile-form">
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <select id="gender">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Age</label>
+                            <input type="number" id="age" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="height">Height (cm)</label>
+                            <input type="number" id="height" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight (kg)</label>
+                            <input type="number" id="weight" required>
+                        </div>
+                        <button type="submit">Update Profile</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h2>🎯 Weight Goal</h2>
+                    <form id="goal-form">
+                        <div class="form-group">
+                            <label for="target-weight">Target Weight (kg)</label>
+                            <input type="number" id="target-weight" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="target-date">Target Date</label>
+                            <input type="date" id="target-date" required>
+                        </div>
+                        <button type="submit">Set Goal</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -9,9 +9,14 @@ class FakeAuthMiddleware(object):
 
     @webob.dec.wsgify
     def __call__(self, req):
-        # Allow OPTIONS for CORS preflight (if needed) or healthcheck
+        # Handle CORS Preflight (OPTIONS)
         if req.method == 'OPTIONS':
-            return req.get_response(self.app)
+            res = webob.Response()
+            res.status = 204
+            res.headers['Access-Control-Allow-Origin'] = '*'
+            res.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+            res.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, X-Auth-Token'
+            return res
         
         # Check token
         token = req.headers.get('X-Auth-Token')

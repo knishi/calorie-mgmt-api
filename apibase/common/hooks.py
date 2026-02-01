@@ -40,3 +40,8 @@ class ErrorHook(hooks.PecanHook):
                 status=500,
                 content_type='application/json; charset=UTF-8'
             )
+class CorsHook(hooks.PecanHook):
+    def after(self, state):
+        state.response.headers['Access-Control-Allow-Origin'] = '*'
+        state.response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+        state.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, X-Auth-Token'

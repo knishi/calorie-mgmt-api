@@ -21,6 +21,34 @@ docker compose up -d --build
 docker compose logs -f
 ```
 
+## 3. ローカル環境での直接実行 (非Docker)
+
+開発・検証目的で Docker を介さずに実行する場合の手順です。
+
+### 準備
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+export PYTHONPATH=$PYTHONPATH:.
+```
+
+### APIサーバーの起動 (Port 8080)
+```bash
+gunicorn --bind 0.0.0.0:8080 apibase.app:application
+```
+
+### GUIサーバーの起動 (Port 3000)
+```bash
+cd public
+python3 -m http.server 3000
+```
+
+### 動作検証スクリプト
+```bash
+./bin/verify_phase2.sh
+```
+
 ## 3. CI/CDパイプライン (GitHub Actions)
 
 GitHubリポジトリにプッシュされると以下のフローが自動実行されます：

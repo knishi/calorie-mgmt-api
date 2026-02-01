@@ -32,7 +32,7 @@ def setup_app(config=None):
 
     # Register hooks
     from apibase.common import hooks
-    app_hooks = [hooks.ErrorHook()]
+    app_hooks = [hooks.ErrorHook(), hooks.CorsHook()]
 
     app = pecan.make_app(
         config.app.root,
