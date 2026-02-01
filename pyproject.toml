@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "apibase"
+version = "1.0.0"
+description = "Gold Master API Server Template"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "pecan>=1.5.1",
+    "oslo.config>=9.6.0",
+    "oslo.db>=16.0.0",
+    "oslo.log>=6.2.0",
+    "gunicorn>=23.0.0",
+    "alembic>=1.13.0",
+]
+
+[tool.setuptools]
+packages = ["apibase"]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8.3.4",
+    "webtest>=3.0.1",
+    "tox>=4.23.2",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+
+[tool.tox]
+legacy_conf_pyproject = """
+[tox]
+envlist = py3
+
+[testenv]
+deps = 
+    .[test]
+commands = 
+    python -m pytest {posargs}
+"""
